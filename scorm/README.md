@@ -1,14 +1,14 @@
 ## Step 1 - Build it once
 ```
-cd scorm-core
+cd scorm
 pnpm install
 pnpm build
 ```
 
 ## Step 2 - Global link SCORM package
 ```
-cd scorm-core
-pnpm link --global
+cd scorm
+pnpm link --global    # no need to do this now
 ```
 
 Think of this like:
@@ -17,7 +17,7 @@ Think of this like:
 ## Step 3 - Link into any Course project
 ```
 cd course-name
-pnpm link --global @scorm/core
+pnpm link ../scorm
 ```
 
 pnpm will:
@@ -70,7 +70,7 @@ pnpm build
 
 When you change SCORM engine anytime:
 ```bash
-cd scorm-core
+cd scorm
 pnpm build
 ```
 Courses instantly see updates because symlink points to dist.
@@ -79,27 +79,28 @@ No reinstall needed.
 ### Verify
 To verify if the symlink is working or not, inside course do:
 ```bash
-pnpm list @scorm/core
+pnpm list scorm
 ```
 
 You should see:
 ```bash
-linked from global store
+dependencies:
+scorm link:../scorm
 ```
 
 ### Unlink (if needed)
 
 From course:
 ```bash
-pnpm unlink @scorm/core
+pnpm unlink scorm
 ```
 
-From scorm-core package:
+From scorm package (not needed now):
 ```bash
 pnpm unlink --global
 ```
 
-⚠️ Important Production Rule
+⚠️ Important Production Rule (Needs to be updated)
 
 pnpm link is for:
 
