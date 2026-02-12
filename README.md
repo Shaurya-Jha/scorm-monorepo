@@ -1,0 +1,105 @@
+# Template for creating Vite courses as per SCORM metrics
+
+## Usage
+
+### Step 1 - Build it once
+```
+cd scorm
+pnpm install
+pnpm build
+```
+
+### Step 2 - Global link SCORM package
+```
+cd scorm
+pnpm link --global    # no need to do this now
+```
+
+Think of this like:
+> "publish locally to your machine"
+
+### Step 3 - Link into any Course project
+```
+cd course-name
+pnpm link ../scorm
+```
+
+pnpm will:
+> - NOT download anything
+> - NOT copy files
+> - create symlink -> live link to scorm package
+
+### Step 4 - Use it in Vite
+
+course-one/vite.config.ts
+```js
+import { defineConfig } from "vite";
+import scormCfg from "./scorm.config";
+import { scormPlugin } from "@scorm/core";
+
+export default defineConfig({
+  plugins: [scormPlugin(scormCfg)]
+})
+```
+
+### Step 5 - Course config
+
+scorm.config.ts
+```js
+export default {
+  id: "course-one",
+  title: "Course One",
+  version: "1.0",
+  scorm: "2004",
+  launch: "index.html",
+  output: "course-one.zip"
+};
+```
+
+### Step 6 - Course build script
+```json
+{
+  "scripts": {
+    "build": "vite build"
+  }
+}
+```
+
+### Step 7 - Build course
+```
+pnpm build
+```
+
+****Important****
+
+When you change SCORM engine anytime:
+```bash
+cd scorm
+pnpm build
+```
+Courses instantly see updates because symlink points to dist.
+No reinstall needed.
+
+### Step 8 - Verify
+To verify if the symlink is working or not, inside course do:
+```bash
+pnpm list scorm
+```
+
+You should see:
+```bash
+dependencies:
+scorm link:../scorm
+```
+
+****Unlink (if needed)****
+
+From course:
+```bash
+pnpm unlink scorm
+```
+
+From scorm package (not needed now):
+```bash
+pnpm unlink --global
+```
